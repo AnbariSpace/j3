@@ -1,0 +1,98 @@
+{
+	"$id": "https://anbari.space/j3/config-schema.json",
+	"type": "object",
+	"properties": {
+		"node-id": {
+			"type": "string"
+		},
+		"database": {
+			"type":"string"
+		},
+		"server": {
+			"$ref": "#/definitions/server-config"
+		},
+		"access-key": {
+			"type": "string"
+		},
+		"access-secret": {
+			"type": "string"
+		},
+		"public-domain": {
+			"type": "string"
+		},
+		"backends": {
+			"type": "array",
+			"items": {
+				"anyOf": [
+					{
+						"$ref": "#/definitions/local-disk-backend-config"
+					}
+				]
+			}
+		},
+		"peers": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/peer"
+			}
+		},
+		"logging": {
+			"$ref": "#/definitions/logging-config"
+		}
+	},
+	"required": ["database", "server", "access-key", "access-secret", "public-domain", "backends"],
+
+	"definitions": {
+		"server-config": {
+			"type": "object",
+			"properties": {
+				"port": {
+					"type": "integer"
+				},
+				"host": {
+					"type": "string"
+				}
+			},
+			"required": ["port"]
+		},
+		"peer": {
+			"type": "object",
+			"properties": {
+				"hostname": {
+					"type": "string"
+				},
+				"port": {
+					"type": "integer"
+				}
+			},
+			"required": ["hostname", "port"]
+		},
+		"local-disk-backend-config": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"location": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "location"]
+		},
+		"logging-config": {
+			"type": "object",
+			"properties": {
+				"file": {
+					"type": "string"
+				},
+				"console": {
+					"type": "boolean"
+				},
+				"level": {
+					"type": "string"
+				}
+			},
+			"required": ["level"]
+		}
+	}
+}
