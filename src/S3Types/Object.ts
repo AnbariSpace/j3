@@ -9,7 +9,7 @@ export default class Object extends Type {
 		public readonly LastModified: Date,
 		public readonly ChecksumAlgorithm: string | undefined,
 		public readonly StorageClass: string,
-		public readonly Owner: Owner,
+		public readonly Owner: Owner | undefined,
 	) {
 		super();
 	}
