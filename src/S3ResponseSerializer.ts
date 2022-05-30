@@ -7,6 +7,6 @@ export default class S3ResponseSerializer {
 	public serialize(type: Type): string {
 		const object: any = {};
 		object[type.constructor.name] = type;
-		return this.builder.buildObject(object);
+		return this.builder.buildObject(JSON.parse(JSON.stringify(object)));
 	}
 }
