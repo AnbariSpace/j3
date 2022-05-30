@@ -5,7 +5,7 @@ export default class HttpError extends Error {
 		super(message);
 	}
 
-	public toType(resource: string, request: string, host: string): ErrorType {
+	public toType(url: string, request: string, host: string): ErrorType {
 		let name = this.constructor.name;
 		if (name.endsWith("Error")) {
 			name = name.substring(0, name.length - 5);
@@ -13,7 +13,7 @@ export default class HttpError extends Error {
 		const type = new ErrorType(
 			name,
 			this.message,
-			resource,
+			(new URL(url, "http://0.0.0.0")).pathname,
 			request,
 			host,
 		);

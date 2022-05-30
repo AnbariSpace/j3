@@ -9,16 +9,17 @@ export enum UnsuportErrorLevel {
     IGNORE,
 }
 
-interface IParameter {
+export interface IParameter {
     required?: boolean;
     place: string;
     unsupported?: UnsuportErrorLevel;
 }
+export type IParameters = Record<string, IParameter>;
 
 export default class Action {
     public readonly method: string = '';
 
-    public readonly parameters: Record<string, IParameter> = {};
+    public readonly parameters: IParameters = {};
 
     public requestId?: string;
     public request?: IncomingMessage;

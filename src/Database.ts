@@ -210,10 +210,17 @@ export default class Database {
 		return this.getObjectSync(bucket, key);
 	}
 
-	public async getObjects(bucket: string, start?: string, limit?: number, _prefix?: string, includedDeleted = false): Promise<IObjectList> {
+	public async getObjects(bucket: string, start?: string, limit?: number, prefix?: string, includedDeleted = false): Promise<IObjectList> {
 		const keyPrefix = `bucket.${bucket}.objects.`;
 		const bucketObjectsStartKey = `bucket.${bucket}.objects-start`;
-		const startKey = start === undefined ? bucketObjectsStartKey : keyPrefix + start;
+		let startKey = bucketObjectsStartKey;
+		if (start && !prefix) {
+			startKey = keyPrefix + start;
+		} else if (!start && prefix) {
+			startKey = keyPrefix + prefix;
+		} else if (start && prefix) {
+			startKey = keyPrefix + (start > prefix ? start : prefix);
+		}
 		const endKey = `bucket.${bucket}.objects/end`;
 		const range = this.db.getRange({
 			start: startKey,
@@ -231,6 +238,9 @@ export default class Database {
 				continue;
 			}
 			const key = (entry.key as string).substring(keyPrefix.length);
+			if (prefix !== undefined && !key.startsWith(prefix)) {
+				continue;
+			}
 			list[key] = entry.value;
 			count++;
 			if (limit !== undefined && count >= limit) {
